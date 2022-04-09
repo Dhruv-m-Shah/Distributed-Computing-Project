@@ -1,0 +1,14 @@
+{
+  "name": "tcpclientnode",
+  "version": "1.0.0",
+  "description": "tcpClient node ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tcpClient"
+  ],
+  "author": "Dhruv Shah",
+  "license": "ISC"
+}

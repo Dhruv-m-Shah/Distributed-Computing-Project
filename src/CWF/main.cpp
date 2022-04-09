@@ -24,10 +24,12 @@
 
 #include "chap03.h"
 #include <ctype.h>
-
+#include <iostream>
+#include <cstdlib>
 
 int main()
 {
+std::freopen( "../../../output.txt", "w", stdout );
 
 #if defined(_WIN32)
 	WSADATA d;
@@ -46,7 +48,7 @@ int main()
 	hints.ai_flags = AI_PASSIVE;
 
 	struct addrinfo *bind_address;
-	getaddrinfo(0, "8080", &hints, &bind_address);
+	getaddrinfo(0, "1026", &hints, &bind_address);
 
 	printf("Creating socket...\n");
 	SOCKET socket_listen;

@@ -1,0 +1,18 @@
+{
+  "name": "tcpservernode",
+  "version": "1.0.0",
+  "description": "tcpServer in node",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dhruv Shah",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "mongodb": "^4.5.0",
+    "node-cache": "^5.1.2",
+    "redis": "^4.0.6"
+  }
+}
