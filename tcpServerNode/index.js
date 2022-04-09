@@ -8,6 +8,7 @@ import TcpRequestHandler from './tcpRequestHandler.js';
 var dataBaseHandler = new DataBaseHandler(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ob8gc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`);
 var redisHandler = new RedisHandler(process.env.REDIS_URL);
 var tcpRequestHandler = new TcpRequestHandler();
+
 const port = 8000;
 
 const options = {
