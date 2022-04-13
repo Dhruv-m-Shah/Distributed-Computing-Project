@@ -1,13 +1,18 @@
 import 'dotenv/config';
 import tls from 'tls'
 import fs from 'fs';
-import DataBaseHandler from './mongoDb.js';
+import DataBaseHandler from './dataBaseHandler.js';
 import RedisHandler from './redisHandler.js';
 import TcpRequestHandler from './tcpRequestHandler.js';
+import LocalCacheHandler from './localCacheHandler.js';
+import Auth from './auth.js'
+import {constants} from './constants.js';
 
 var dataBaseHandler = new DataBaseHandler(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ob8gc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`);
 var redisHandler = new RedisHandler(process.env.REDIS_URL);
-var tcpRequestHandler = new TcpRequestHandler();
+var localCacheHandler = new LocalCacheHandler();
+var auth = new Auth(dataBaseHandler, redisHandler, localCacheHandler);
+var tcpRequestHandler = new TcpRequestHandler(dataBaseHandler, redisHandler, localCacheHandler, auth);
 
 const port = 8000;
 
@@ -24,8 +29,11 @@ var server = tls.createServer(options, (socket) => {
   socket.setEncoding('utf8');
   socket.pipe(socket);
   socket.on('data', (data) => {
-    console.log(data.toString());
-    socket.end();
+    try {
+    tcpRequestHandler.handleTcpRequest(data, socket);
+    } catch(e) {
+      console.log(e);
+    }
   });
 })
 
