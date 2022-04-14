@@ -13,7 +13,7 @@ pprint.pprint(ssl_sock.getpeercert())
 # note that closing the SSLSocket will also close the underlying socket
 #ssl_sock.close()
 
-d = {
+taskProviderHeartBeat = {
    "name": "test123",
    "type": "heartbeat", 
    "key": "test123",
@@ -21,7 +21,27 @@ d = {
    "providerState": "OK"
 }
 
+taskClientTask = {
+   "type": "task",
+   "key": "test123",
+   "taskName": "test123", 
+   "taskClientName": "test123",
+   "computingProviderNames": ["test123"],
+   "computingProviderPasswords": ["test123"],
+   "pyScripts": ["print(\"test\")"] 
+}
+
 while(True):
-    time.sleep(2)
-    jsonStr = json.dumps(d)
-    ssl_sock.send(str.encode(jsonStr))
+   time.sleep(2)
+   jsonStr = json.dumps(taskProviderHeartBeat)
+   ssl_sock.send(str.encode(jsonStr))
+   time.sleep(2)
+   jsonStr = json.dumps(taskClientTask)
+   ssl_sock.send(str.encode(jsonStr))
+   data = ssl_sock.recv(1024)
+   if not data:
+      print('\r{}:'.format(ssl_sock.getpeername()),'disconnected')
+      ssl_sock.close()
+   else:
+      print('\r{}:'.format(ssl_sock.getpeername()),data)
+    

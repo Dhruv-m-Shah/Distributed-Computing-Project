@@ -25,12 +25,12 @@ export default class DataBaseHandler {
         }
     }
 
-    async getTaskProviderPassword(taskProviderPassword) {
+    async getTaskProviderPassword(taskProviderName) {
       const options = {
         projection: { password: 1 }
       };
-      let dbRes = await this.db.collection(constants.DB_COLLECTION_NAMES.COMPUTING_PROVIDERS).findOne({password: taskProviderPassword}, options);
+      let dbRes = await this.db.collection(constants.DB_COLLECTION_NAMES.COMPUTING_PROVIDERS).findOne({name: taskProviderName}, options);
       console.log(dbRes);
-      return dbRes;
+      return dbRes["password"];
     }
   }

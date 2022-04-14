@@ -25,9 +25,7 @@ const options = {
 };
 
 var server = tls.createServer(options, (socket) => {
-  socket.write('welcome!\n');
   socket.setEncoding('utf8');
-  socket.pipe(socket);
   socket.on('data', (data) => {
     try {
     tcpRequestHandler.handleTcpRequest(data, socket);

@@ -72,7 +72,6 @@ export default class TcpRequestHandler {
         if(!isValid) {
             return constants.RESPONSES.ERROR_REQUEST_PARSE
         }
-
         isValid = isValid && typeof(jsonParsedString["type"]) == "string" && typeof(jsonParsedString["key"]) == "string"
                           && typeof(jsonParsedString["tasksInQueue"]) == "number" && typeof(jsonParsedString["providerState"]) == "string"
                           && typeof(jsonParsedString["name"] == "string");
@@ -86,15 +85,14 @@ export default class TcpRequestHandler {
 
     verifyTask(req) {
         let isValid = true;
-        isValid = isValid && (Object.keys(req).lenth == constants.TCP_REQUEST_TYPES.TASK)
+        isValid = isValid && (Object.keys(req).length == constants.TCP_REQUEST_TYPES.NUM_KEYS_IN_TASK)
         isValid = isValid && ("type" in req && "key" in req && "taskName" in req && "computingProviderNames" in req
                           && "computingProviderPasswords" in req && "pyScripts" in req && "taskClientName" in req);
         if(!isValid) {
             return constants.RESPONSES.ERROR_REQUEST_PARSE;
         }
-
         isValid = isValid && typeof(req["type"]) == "string" && typeof(req["key"]) == "string"
-                          && typeof(req["taskName"]) in req && typeof(req["taskClientName"]) == "string" 
+                          && typeof(req["taskName"]) == "string" && typeof(req["taskClientName"]) == "string" 
                           && Array.isArray(req["computingProviderNames"])
                           && Array.isArray(req["computingProviderPasswords"]) && Array.isArray(req["pyScripts"])
                           && checkStringArray(req["computingProviderNames"]) && checkStringArray(req["computingProviderPasswords"])
@@ -110,9 +108,9 @@ export default class TcpRequestHandler {
         if(typeOfRequest == constants.TCP_REQUEST_TYPES.HEART_BEAT) {
             this.handleHeartBeatRequest(req, socket);
         } else if(typeOfRequest == constants.TCP_REQUEST_TYPES.TASK) {
-            this.handleTaskRequest(jsonParsedString, socket);
+            this.handleTaskRequest(req, socket);
         } else if (typeOfRequest == constants.TCP_REQUEST_TYPES.TASK_FINISHED) {
-            this.handleTaskFinishedRequest(jsonParsedString, socket); 
+            this.handleTaskFinishedRequest(req, socket); 
         }
     }
 
@@ -127,23 +125,23 @@ export default class TcpRequestHandler {
         this.nameToSocket[req["name"]] = socket;
     }
 
-    handleTask(req) {
+    async handleTaskRequest(req) {
         // check that all tasks provider's socket connections exist.
-        for(let i = 0; i < req["computingProviderNames"].size(); i++) {
+        for(let i = 0; i < req["computingProviderNames"].length; i++) {
            if(!(req["computingProviderNames"][i] in this.nameToSocket)) {
                return constants.RESPONSES.PROVIDER_NOT_FOUND;
            }
-           taskProviderPassword = await dataBaseHandler.getTaskProviderPassword(req["computingProviderNames"][i]);
+           let taskProviderPassword = await this.dataBaseHandler.getTaskProviderPassword(req["computingProviderNames"][i]);
            if(req["computingProviderPasswords"][i] != taskProviderPassword) {
                return constants.RESPONSES.PROVIDER_PASSWORD_INCORRECT;
            }
         }
-        for(let i = 0; i < req["computingProviderNames"].size(); i++) {
+        for(let i = 0; i < req["computingProviderNames"].length; i++) {
             let computingProviderName = req["computingProviderNames"][i];
-            socket = this.nameToSocket[computingProviderName]
-            taskRequest = {
+            let socket = this.nameToSocket[computingProviderName]
+            let taskRequest = {
                 taskName: req["taskName"],
-                taskIssuerName: req["taskIssuerName"],
+                taskIssuerName: req["taskClientName"],
                 pythonScript: req["pyScripts"][i]
             }
             socket.write(JSON.stringify(taskRequest));
