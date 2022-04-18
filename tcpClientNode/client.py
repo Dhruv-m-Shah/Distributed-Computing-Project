@@ -35,7 +35,7 @@ while(True):
    time.sleep(2)
    jsonStr = json.dumps(taskProviderHeartBeat)
    bytesStr = str.encode(jsonStr)
-   ssl_sock.send(str.encode("1000") + bytesStr)
+   ssl_sock.send(str.encode("0050") + bytesStr)
    time.sleep(2)
    jsonStr = json.dumps(taskClientTask)
    ssl_sock.send(str.encode(jsonStr))
