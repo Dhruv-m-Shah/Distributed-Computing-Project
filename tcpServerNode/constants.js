@@ -28,5 +28,6 @@ export const constants = {
       ERROR_REQUEST_PARSE : "errorRequestParse",
       PROVIDER_NOT_FOUND: "Provider name was not found",
       PROVIDER_PASSWORD_INCORRECT: "Provider password was incorrect"
-  }
+  },
+  MAX_MESSAGE_SIZE : 100000000 // 100 mb
 };

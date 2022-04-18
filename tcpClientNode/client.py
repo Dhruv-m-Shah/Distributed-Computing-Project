@@ -34,14 +34,11 @@ taskClientTask = {
 while(True):
    time.sleep(2)
    jsonStr = json.dumps(taskProviderHeartBeat)
-   ssl_sock.send(str.encode(jsonStr))
+   bytesStr = str.encode(jsonStr)
+   ssl_sock.send(str.encode("1000") + bytesStr)
    time.sleep(2)
    jsonStr = json.dumps(taskClientTask)
    ssl_sock.send(str.encode(jsonStr))
    data = ssl_sock.recv(1024)
-   if not data:
-      print('\r{}:'.format(ssl_sock.getpeername()),'disconnected')
-      ssl_sock.close()
-   else:
-      print('\r{}:'.format(ssl_sock.getpeername()),data)
+
     
