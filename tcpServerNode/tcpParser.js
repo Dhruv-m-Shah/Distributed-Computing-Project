@@ -11,25 +11,23 @@ export default class TcpParser {
 
     checkIfMessageReceived() {
         try {
-        let contentLengthBytes = null;
-        console.log(this.buffer.length);
-        console.log(this.buffer);
-        if(this.buffer.length >= 4){
-            contentLengthBytes = Number(this.buffer.toString('utf-8',0, 4)); // get first 4 bytes which specify content length.
-        } else {
-            return null;
+            let contentLengthBytes = null;
+            if(this.buffer.length >= constants.CONTENT_SIZE_LEN) {
+                contentLengthBytes = Number(this.buffer.toString(constants.TCP_ENCODING, 0,
+                                                                 constants.CONTENT_SIZE_LEN));
+            } else {
+                return null;
+            }
+            if(contentLengthBytes != null && this.buffer.length >= constants.CONTENT_SIZE_LEN + contentLengthBytes) {
+                let message = this.buffer.toString(constants.TCP_ENCODING, constants.CONTENT_SIZE_LEN,
+                                                constants.CONTENT_SIZE_LEN+contentLengthBytes);
+                this.buffer = this.buffer.subarray(constants.CONTENT_SIZE_LEN+contentLengthBytes);
+                return message;
+            } else {
+                return null;
+            }
+        } catch(e) {
+            console.log(e);
         }
-        console.log(contentLengthBytes);
-        if(contentLengthBytes != null && this.buffer.length >= 4 + contentLengthBytes){
-            let message = Buffer.toString(4, 4+contentLengthBytes);
-            this.buffer = this.buffer.subarray(4+contentLengthBytes);
-            return message;
-        } else {
-            return null;
-        }
-    } catch(e) {
-        console.log(e);
     }
-    }
-
-  }
+}

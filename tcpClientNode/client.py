@@ -31,11 +31,21 @@ taskClientTask = {
    "pyScripts": ["print(\"test\")"] 
 }
 
+def conv16ByteStr(string):
+   if(len(string) > 16):
+      raise Exception("Too many bytes in string")
+   while(len(string) < 16):
+      string  = "0" + string
+   return string
+
 while(True):
    time.sleep(2)
    jsonStr = json.dumps(taskProviderHeartBeat)
    bytesStr = str.encode(jsonStr)
-   ssl_sock.send(str.encode("0050") + bytesStr)
+   print(len(bytesStr))
+   lenByte = str.encode(conv16ByteStr(str(len(bytesStr))))
+   ssl_sock.send(lenByte + bytesStr)
+   continue
    time.sleep(2)
    jsonStr = json.dumps(taskClientTask)
    ssl_sock.send(str.encode(jsonStr))
