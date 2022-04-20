@@ -10,7 +10,6 @@ class TaskScheduler:
     def startScheduler(self, mutex, queue):
         while(True):
             mutex.acquire()
-            print("A")
             if(len(queue.taskQueue) > 0):
                 task = queue.pop()
                 try:
