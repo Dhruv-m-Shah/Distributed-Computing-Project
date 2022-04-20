@@ -140,6 +140,7 @@ export default class TcpRequestHandler {
             let computingProviderName = req["computingProviderNames"][i];
             let socket = this.nameToSocket[computingProviderName]
             let taskRequest = {
+                type: "task",
                 taskName: req["taskName"],
                 taskIssuerName: req["taskClientName"],
                 pythonScript: req["pyScripts"][i]
