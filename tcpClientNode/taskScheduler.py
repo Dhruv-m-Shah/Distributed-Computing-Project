@@ -14,6 +14,8 @@ class TaskScheduler:
                 task = queue.pop()
                 try:
                     exec(task["pythonScript"])
+                    print(task)
                 except Exception as e:
                     print(e)
             mutex.release()
+            time.sleep(1)

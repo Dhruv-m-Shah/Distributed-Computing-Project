@@ -46,10 +46,13 @@ while(True):
    print(len(bytesStr))
    lenByte = str.encode(conv16ByteStr(str(len(bytesStr))))
    ssl_sock.send(lenByte + bytesStr)
-   continue
    time.sleep(2)
    jsonStr = json.dumps(taskClientTask)
-   ssl_sock.send(str.encode(jsonStr))
+   bytesStr = str.encode(jsonStr)
+   lenByte = str.encode(conv16ByteStr(str(len(bytesStr))))
+   ssl_sock.send(lenByte + bytesStr)
+   time.sleep(1)
    data = ssl_sock.recv(1024)
+   print(data[0:16])
 
     

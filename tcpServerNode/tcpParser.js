@@ -1,7 +1,7 @@
 import { constants } from "./constants.js"
 
 export default class TcpParser {
-    constructor(url) {
+    constructor() {
         this.buffer = Buffer.alloc(0);
     }
 
@@ -29,5 +29,16 @@ export default class TcpParser {
         } catch(e) {
             console.log(e);
         }
+    }
+
+    formatTcpMessage(msg) {
+        let msgLenInBytes = Buffer.byteLength(msg, 'utf8').toString();
+        if(msgLenInBytes.length > 16) {
+            return constants.RESPONSES.MESSAGE_SIZE_EXCEEDED;
+        }
+        while(msgLenInBytes.length < 16) {
+            msgLenInBytes = "0" + msgLenInBytes;
+        }
+        return msgLenInBytes + JSON.stringify(msg);
     }
 }

@@ -1,6 +1,6 @@
 
 import {constants} from './constants.js';
-
+import TcpParser  from './tcpParser.js';
 
 function checkStringArray(arr) {
     for(let i = 0; i < arr.length; i++) {
@@ -18,6 +18,7 @@ export default class TcpRequestHandler {
         this.localCacheHandler = localCacheHandler;
         this.auth = auth;
         this.nameToSocket = {};
+        this.tcpParser = new TcpParser(); 
     }
 
     handleTcpRequest(rawReq, socket) {
@@ -136,6 +137,7 @@ export default class TcpRequestHandler {
                return constants.RESPONSES.PROVIDER_PASSWORD_INCORRECT;
            }
         }
+
         for(let i = 0; i < req["computingProviderNames"].length; i++) {
             let computingProviderName = req["computingProviderNames"][i];
             let socket = this.nameToSocket[computingProviderName]
@@ -145,7 +147,8 @@ export default class TcpRequestHandler {
                 taskIssuerName: req["taskClientName"],
                 pythonScript: req["pyScripts"][i]
             }
-            socket.write(JSON.stringify(taskRequest));
+            
+            socket.write(this.tcpParser.formatTcpMessage(JSON.stringify(taskRequest)));
         }
     }
   }

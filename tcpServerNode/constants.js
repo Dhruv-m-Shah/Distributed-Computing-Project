@@ -27,7 +27,8 @@ export const constants = {
       SUCCESS: "SUCCESS",
       ERROR_REQUEST_PARSE : "errorRequestParse",
       PROVIDER_NOT_FOUND: "Provider name was not found",
-      PROVIDER_PASSWORD_INCORRECT: "Provider password was incorrect"
+      PROVIDER_PASSWORD_INCORRECT: "Provider password was incorrect",
+      MESSAGE_SIZE_EXCEEDED: "Program is too long"
   },
   MAX_MESSAGE_SIZE : 100000000, // 100 mb
   CONTENT_SIZE_LEN : 16,
