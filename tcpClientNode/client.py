@@ -41,18 +41,15 @@ def conv16ByteStr(string):
 
 while(True):
    time.sleep(2)
-   jsonStr = json.dumps(taskProviderHeartBeat)
-   bytesStr = str.encode(jsonStr)
-   print(len(bytesStr))
-   lenByte = str.encode(conv16ByteStr(str(len(bytesStr))))
-   ssl_sock.send(lenByte + bytesStr)
-   time.sleep(2)
    jsonStr = json.dumps(taskClientTask)
    bytesStr = str.encode(jsonStr)
    lenByte = str.encode(conv16ByteStr(str(len(bytesStr))))
-   ssl_sock.send(lenByte + bytesStr)
+   ssl_sock.write(lenByte + bytesStr)
    time.sleep(1)
-   data = ssl_sock.recv(1024)
-   print(data[0:16])
+   print(ssl_sock.recv(1024))
+   print(ssl_sock.pending())
+   if(ssl_sock.pending()):
+      data = ssl_sock.recv(1024)
+      print(data)
 
     

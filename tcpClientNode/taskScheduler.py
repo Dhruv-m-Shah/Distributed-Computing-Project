@@ -13,6 +13,7 @@ class TaskScheduler:
             if(len(queue.taskQueue) > 0):
                 task = queue.pop()
                 try:
+                    print("ASDAS")
                     exec(task["pythonScript"])
                     print(task)
                 except Exception as e:

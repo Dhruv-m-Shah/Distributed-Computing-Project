@@ -1,5 +1,5 @@
 import constants
-
+import json
 class TcpParser:
 
     def __init__(self):
@@ -20,3 +20,15 @@ class TcpParser:
         
         return sizeOfMessage
 
+    def conv16ByteStr(self, string):
+        if(len(string) > 16):
+            raise Exception("Too many bytes in string")
+        while(len(string) < 16):
+            string  = "0" + string
+        return string
+
+    def formatTcpMessage(self, msg):
+        jsonStr = json.dumps(msg)
+        bytesStr = str.encode(jsonStr)
+        lenByte = str.encode(self.conv16ByteStr(str(len(bytesStr))))
+        return lenByte + bytesStr

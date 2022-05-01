@@ -147,7 +147,7 @@ export default class TcpRequestHandler {
                 taskIssuerName: req["taskClientName"],
                 pythonScript: req["pyScripts"][i]
             }
-            
+            console.log("HER")
             socket.write(this.tcpParser.formatTcpMessage(JSON.stringify(taskRequest)));
         }
     }

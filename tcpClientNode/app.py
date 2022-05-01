@@ -4,20 +4,27 @@ from taskQueue import TaskQueue
 from eventHandler import EventHandler
 import constants
 from taskScheduler import TaskScheduler
+from heartBeat import HeartBeat
 import socket, ssl, pprint
 import time
 import json 
 
-mutex = Lock()
+mutexQueue = Lock()
+mutexSocket = Lock()
 taskQueue = TaskQueue()
-scheduler = TaskScheduler(mutex, taskQueue)
+scheduler = TaskScheduler(mutexQueue, taskQueue)
+tcpParser = TcpParser()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
 # require a certificate from the server
 ssl_sock = ssl.wrap_socket(s,
                            ca_certs="../certs/ca/ca.crt",
                            cert_reqs=ssl.CERT_REQUIRED)
-ssl_sock.connect(('localhost', 8000))
 
-eventHandler = EventHandler(ssl_sock, mutex, taskQueue)
+ret = ssl_sock.connect_ex(('localhost', 8000))
+print(ret)
+ssl_sock.setblocking(0)
+time.sleep(1)
+heartBeat = HeartBeat(ssl_sock, mutexQueue, mutexSocket, tcpParser, taskQueue)
+print("ASD")
+eventHandler = EventHandler(ssl_sock, mutexQueue, mutexSocket, taskQueue)
