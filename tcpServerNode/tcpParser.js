@@ -32,13 +32,14 @@ export default class TcpParser {
     }
 
     formatTcpMessage(msg) {
-        let msgLenInBytes = Buffer.byteLength(msg, 'utf8').toString();
+        let msgLenInBytes = msg.length;
         if(msgLenInBytes.length > 16) {
             return constants.RESPONSES.MESSAGE_SIZE_EXCEEDED;
         }
+        msgLenInBytes = msgLenInBytes.toString()
         while(msgLenInBytes.length < 16) {
             msgLenInBytes = "0" + msgLenInBytes;
         }
-        return msgLenInBytes + JSON.stringify(msg);
+        return msgLenInBytes + msg;
     }
 }

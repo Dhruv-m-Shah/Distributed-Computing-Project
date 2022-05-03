@@ -15,9 +15,10 @@ class TcpParser:
         
         if(sizeOfMessage):
             if(len(self.buffer) >= sizeOfMessage + constants.CONTENT_SIZE_LEN):
-                message = str(self.buffer[constants.CONTENT_SIZE_LEN : (constants.CONTENT_SIZE_LEN + sizeOfMessage)])
+                message = self.buffer[constants.CONTENT_SIZE_LEN : (constants.CONTENT_SIZE_LEN + sizeOfMessage)].decode('utf-8')
                 return message
-        
+            else:
+                return None
         return sizeOfMessage
 
     def conv16ByteStr(self, string):

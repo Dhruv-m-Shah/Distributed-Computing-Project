@@ -30,9 +30,7 @@ var server = tls.createServer(options, (socket) => {
     try {
       tcpParser.appendData(data);
       let msg = tcpParser.checkIfMessageReceived();
-      console.log(msg);
       if(msg!=null) {
-        console.log(msg);
         tcpRequestHandler.handleTcpRequest(msg, socket);
       }
     } catch(e) {

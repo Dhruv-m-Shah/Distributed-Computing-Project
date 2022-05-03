@@ -5,6 +5,7 @@ import constants
 import threading
 import time
 import select
+import json
 
 class EventHandler:
     def __init__(self, soc, mutexQueue, mutexSocket, queue):
@@ -12,30 +13,36 @@ class EventHandler:
         self.tcpParser = TcpParser()
         self.mutexQueue = mutexQueue
         self.mutexSocket = mutexSocket
+        self.queue = queue
         self.listenForData = threading.Thread(target=self.listenForData,
                                                 name="listenForData", args=[self.soc, self.mutexQueue, self.mutexSocket, self.tcpParser])
         self.listenForData.start()
 
     def listenForData(self, soc, mutexQueue, mutexSocket, tcpParser):
         while(True):
-            print("A")
             time.sleep(constants.DATA_LISTEN_FREQ)
             mutexSocket.acquire()
             data = 0
             try:
                 data = soc.recv(constants.SOCK_RECV_SIZE_IN_BYTES)
-                print(data)
+                tcpParser.addToBuffer(data)
+                msg = tcpParser.checkIfMessageRecieved()
+                if(msg):
+                    self.processMsg(msg)
             except Exception as e:
                 print(e)
             mutexSocket.release()
                 
     
-    def processMsg(msg):
-        jsonMsg = json.loads(str(msg))
+    def processMsg(self, msg):
+        print(str(msg)[0])
+        print("A")
+        jsonMsg = json.loads(msg, encoding='utf-8')
+        print(jsonMsg)
         if(jsonMsg["type"] == constants.TASKTYPE):
-            processTaskMsg(jsonMsg)
+            self.processTaskMsg(jsonMsg)
     
-    def processTaskMsg(msg):
+    def processTaskMsg(self, msg):
         self.mutexQueue.acquire()
         self.queue.add(msg)
         self.mutexQueue.release()
