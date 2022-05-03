@@ -26,7 +26,7 @@ taskClientTask = {
    "type": "task",
    "key": "test123",
    "taskName": "test123", 
-   "taskClientName": "test123",
+   "taskClientName": "test1234",
    "computingProviderNames": ["test123"],
    "computingProviderPasswords": ["test123"],
    "pyScripts": ["print(\"test\")"] 

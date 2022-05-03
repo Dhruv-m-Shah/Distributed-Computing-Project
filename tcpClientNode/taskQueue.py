@@ -10,7 +10,6 @@ class TaskQueue:
     
     def add(self, task):
         self.taskQueue.append(task)
-        print(self.taskQueue)
     
     def pop(self):
         if(len(self.taskQueue) != 0):

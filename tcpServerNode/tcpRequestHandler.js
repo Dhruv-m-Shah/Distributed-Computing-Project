@@ -105,6 +105,24 @@ export default class TcpRequestHandler {
         }
     }
 
+    verifyTaskFinised(req) {
+        let isValid = true;
+        isValid = isValid && (Object.keys(req).length == constants.TCP_REQUEST_TYPES_NUM_KEYS_IN_TASK_FINISED);
+        isValid = isValid && ("key" in req && "name" in req && "taskName" in req && "taskIssuerName" in req 
+                                           && "taskStatus" in req && "type" in req);
+        if(!isValid) {
+            return constants.RESPONSES.ERROR_REQUEST_PARSE;
+        }
+        isValid = isValid && typeof(req["key"] == "string" && typeof(req["name"]) == "string" && typeof(req["taskName"]) == "string"
+                                    && req["taskIssuerName"] == "string" && typeof("taskStatus") == "string" && typeof("type") == "string");
+        if(isValid) {
+            return constants.TCP_REQUEST_TYPES.TASK_FINISED;
+        } else {
+            return constants.RESPONSES.ERROR_REQUEST_PARSE;
+        }
+
+    }
+
     handleRequest(req, typeOfRequest, socket) {
         if(typeOfRequest == constants.TCP_REQUEST_TYPES.HEART_BEAT) {
             this.handleHeartBeatRequest(req, socket);
@@ -113,6 +131,14 @@ export default class TcpRequestHandler {
         } else if (typeOfRequest == constants.TCP_REQUEST_TYPES.TASK_FINISHED) {
             this.handleTaskFinishedRequest(req, socket); 
         }
+    }
+
+    handleTaskFinishedRequest(req, socket) {
+        if(!(req["taskIssuerName"] in self.nameToSocket)) {
+            constants.RESPONSES.TASK_CLIENT_NOT_FOUND
+        }
+        delete req.key;
+        this.nameToSocket[req["taskIssuerName"]].write(this.tcpParser.formatTcpMessage(req));
     }
 
     handleHeartBeatRequest(req, socket) {
@@ -126,8 +152,9 @@ export default class TcpRequestHandler {
         this.nameToSocket[req["name"]] = socket;
     }
 
-    async handleTaskRequest(req) {
+    async handleTaskRequest(req, socket) {
         // check that all tasks provider's socket connections exist.
+        this.nameToSocket[req["taskClientName"]] = socket;
         for(let i = 0; i < req["computingProviderNames"].length; i++) {
            if(!(req["computingProviderNames"][i] in this.nameToSocket)) {
                return constants.RESPONSES.PROVIDER_NOT_FOUND;
@@ -137,7 +164,6 @@ export default class TcpRequestHandler {
                return constants.RESPONSES.PROVIDER_PASSWORD_INCORRECT;
            }
         }
-
         for(let i = 0; i < req["computingProviderNames"].length; i++) {
             let computingProviderName = req["computingProviderNames"][i];
             let socket = this.nameToSocket[computingProviderName]
@@ -151,4 +177,5 @@ export default class TcpRequestHandler {
             socket.write(this.tcpParser.formatTcpMessage(taskRequest));
         }
     }
+    
   }

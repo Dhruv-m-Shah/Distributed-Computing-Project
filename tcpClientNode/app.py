@@ -22,7 +22,6 @@ ssl_sock = ssl.wrap_socket(s,
                            cert_reqs=ssl.CERT_REQUIRED)
 
 ret = ssl_sock.connect_ex(('localhost', 8000))
-print(ret)
 ssl_sock.setblocking(0)
 time.sleep(1)
 finishedTaskHandler = FinishedTaskHandler(ssl_sock, tcpParser, mutexSocket)
