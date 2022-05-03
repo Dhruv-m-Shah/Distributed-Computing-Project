@@ -148,7 +148,7 @@ export default class TcpRequestHandler {
                 pythonScript: req["pyScripts"][i]
             }
             console.log(this.tcpParser.formatTcpMessage(JSON.stringify(taskRequest)))
-            socket.write(this.tcpParser.formatTcpMessage(JSON.stringify(taskRequest)));
+            socket.write(this.tcpParser.formatTcpMessage(taskRequest));
         }
     }
   }

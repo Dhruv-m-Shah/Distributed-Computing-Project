@@ -35,10 +35,7 @@ class EventHandler:
                 
     
     def processMsg(self, msg):
-        print(str(msg)[0])
-        print("A")
         jsonMsg = json.loads(msg, encoding='utf-8')
-        print(jsonMsg)
         if(jsonMsg["type"] == constants.TASKTYPE):
             self.processTaskMsg(jsonMsg)
     

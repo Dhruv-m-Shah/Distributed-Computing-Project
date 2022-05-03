@@ -1,23 +1,27 @@
 import threading
+import constants
 import time
 class TaskScheduler:
-    def __init__(self, mutex, queue):
-        self.mutex = mutex
+    def __init__(self, mutexQueue, queue, finishedTaskHandler):
+        self.mutexQueue = mutexQueue
         self.queue = queue
-        self.schedulerThread = threading.Thread(target=self.startScheduler, name="scheduler", args=[self.mutex, self.queue])
+        self.finishedTaskHandler = finishedTaskHandler
+        self.schedulerThread = threading.Thread(target=self.startScheduler, name="scheduler", args=[self.mutexQueue, self.queue, self.finishedTaskHandler])
         self.schedulerThread.start()
     
-    def startScheduler(self, mutex, queue):
+    def startScheduler(self, mutexQueue, queue, finishedTaskHandler):
         while(True):
-            mutex.acquire()
-            print("HERE")
+            mutexQueue.acquire()
+            task = None
             if(len(queue.taskQueue) > 0):
                 task = queue.pop()
+                resp = None
                 try:
-                    print("ASDAS")
                     exec(task["pythonScript"])
-                    print(task)
+                    resp = constants.SUCCESS_RESP
                 except Exception as e:
-                    print(e)
-            mutex.release()
+                    resp = e
+            mutexQueue.release()
+            if(task):
+                finishedTaskHandler.sendFinishedStatus(task, resp)
             time.sleep(1)
