@@ -54,6 +54,7 @@ export default class TcpRequestHandler {
             } else if(typeOfRequest == constants.TCP_REQUEST_TYPES.TASK) {
                 return this.verifyTask(req);
             } else if (typeOfRequest == constants.TCP_REQUEST_TYPES.TASK_FINISHED) {
+                console.log("ASDASDASDASD")
                 return this.verifyTaskFinished(req); 
             } else {
                 return constants.RESPONSES.ERROR_REQUEST_PARSE;
@@ -105,22 +106,23 @@ export default class TcpRequestHandler {
         }
     }
 
-    verifyTaskFinised(req) {
+    verifyTaskFinished(req) {
+        console.log(req)
         let isValid = true;
-        isValid = isValid && (Object.keys(req).length == constants.TCP_REQUEST_TYPES_NUM_KEYS_IN_TASK_FINISED);
+        isValid = isValid && (Object.keys(req).length == constants.TCP_REQUEST_TYPES.TCP_REQUEST_TYPES_NUM_KEYS_IN_TASK_FINISHED);
         isValid = isValid && ("key" in req && "name" in req && "taskName" in req && "taskIssuerName" in req 
                                            && "taskStatus" in req && "type" in req);
         if(!isValid) {
+            console.log("ASD")
             return constants.RESPONSES.ERROR_REQUEST_PARSE;
         }
         isValid = isValid && typeof(req["key"] == "string" && typeof(req["name"]) == "string" && typeof(req["taskName"]) == "string"
                                     && req["taskIssuerName"] == "string" && typeof("taskStatus") == "string" && typeof("type") == "string");
         if(isValid) {
-            return constants.TCP_REQUEST_TYPES.TASK_FINISED;
+            return constants.TCP_REQUEST_TYPES.TASK_FINISHED;
         } else {
             return constants.RESPONSES.ERROR_REQUEST_PARSE;
         }
-
     }
 
     handleRequest(req, typeOfRequest, socket) {
@@ -134,7 +136,7 @@ export default class TcpRequestHandler {
     }
 
     handleTaskFinishedRequest(req, socket) {
-        if(!(req["taskIssuerName"] in self.nameToSocket)) {
+        if(!(req["taskIssuerName"] in this.nameToSocket)) {
             constants.RESPONSES.TASK_CLIENT_NOT_FOUND
         }
         delete req.key;

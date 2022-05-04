@@ -17,9 +17,10 @@ class FinishedTaskHandler:
             "taskStatus": taskStatus,
             "type": constants.TASK_FINISHED
         }
+        print(resp)
         writableStr = self.tcpParser.formatTcpMessage(resp)
         self.mutexSoc.acquire()
-        self.soc.sendall(writableStr)
+        self.soc.write(writableStr)
         self.mutexSoc.release()
 
         

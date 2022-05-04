@@ -48,8 +48,6 @@ while(True):
    time.sleep(1)
    print(ssl_sock.recv(1024))
    print(ssl_sock.pending())
-   if(ssl_sock.pending()):
-      data = ssl_sock.recv(1024)
-      print(data)
+   break
 
     

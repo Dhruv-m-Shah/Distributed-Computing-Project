@@ -9,6 +9,7 @@ class TaskQueue:
         return len(self.taskQueue)
     
     def add(self, task):
+        print(self.taskQueue)
         self.taskQueue.append(task)
     
     def pop(self):

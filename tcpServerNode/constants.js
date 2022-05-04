@@ -2,10 +2,10 @@ export const constants = {
     TCP_REQUEST_TYPES: {
         HEART_BEAT : "heartbeat",
         TASK : "task",
-        TASK_FINISED : "taskFinished",
+        TASK_FINISHED : "taskFinished",
         NUM_KEYS_IN_HEARTBEAT : 5,
         NUM_KEYS_IN_TASK : 7,
-        TCP_REQUEST_TYPES_NUM_KEYS_IN_TASK_FINISED: 6
+        TCP_REQUEST_TYPES_NUM_KEYS_IN_TASK_FINISHED: 6
     },
   CACHE_CONSTANTS: {
     TIME_TO_EXPIRE_KEY_IN_SEC : 3600,
