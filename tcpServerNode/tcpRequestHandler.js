@@ -107,13 +107,12 @@ export default class TcpRequestHandler {
     }
 
     verifyTaskFinished(req) {
-        console.log(req)
+        console.log(req);
         let isValid = true;
         isValid = isValid && (Object.keys(req).length == constants.TCP_REQUEST_TYPES.TCP_REQUEST_TYPES_NUM_KEYS_IN_TASK_FINISHED);
         isValid = isValid && ("key" in req && "name" in req && "taskName" in req && "taskIssuerName" in req 
                                            && "taskStatus" in req && "type" in req);
         if(!isValid) {
-            console.log("ASD")
             return constants.RESPONSES.ERROR_REQUEST_PARSE;
         }
         isValid = isValid && typeof(req["key"] == "string" && typeof(req["name"]) == "string" && typeof(req["taskName"]) == "string"

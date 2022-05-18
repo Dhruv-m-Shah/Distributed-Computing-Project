@@ -1,4 +1,4 @@
-import config
+import configTaskClient as config
 import constants
 class FinishedTaskHandler:
     def __init__(self, soc, tcpParser, mutexSoc):
@@ -10,8 +10,8 @@ class FinishedTaskHandler:
 
     def sendFinishedStatus(self, msg, taskStatus):
         resp = {
-            "key": config.TASK_PROVIDER_KEY,
-            "name": config.TASK_PROVER_NAME,
+            "key": configTaskClient.TASK_PROVIDER_KEY,
+            "name": configTaskClient.TASK_PROVER_NAME,
             "taskName": msg["taskName"],
             "taskIssuerName": msg["taskIssuerName"],
             "taskStatus": taskStatus,
