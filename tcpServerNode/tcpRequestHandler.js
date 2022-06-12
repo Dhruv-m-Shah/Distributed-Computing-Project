@@ -54,7 +54,6 @@ export default class TcpRequestHandler {
             } else if(typeOfRequest == constants.TCP_REQUEST_TYPES.TASK) {
                 return this.verifyTask(req);
             } else if (typeOfRequest == constants.TCP_REQUEST_TYPES.TASK_FINISHED) {
-                console.log("ASDASDASDASD")
                 return this.verifyTaskFinished(req); 
             } else {
                 return constants.RESPONSES.ERROR_REQUEST_PARSE;

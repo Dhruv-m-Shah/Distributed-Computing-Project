@@ -32,6 +32,10 @@ export const constants = {
       MESSAGE_SIZE_EXCEEDED: "Program is too long",
       TASK_CLIENT_NOT_FOUND: "Task provider was not found"
   },
+  LOAD_BALANCING: {
+    MAX_CLIENT_TASK_REQUESTS: 20,
+    LOAD_BALANCING_WINDOW_SEC: 60 // 60 second window
+  },
   MAX_MESSAGE_SIZE : 100000000, // 100 mb
   CONTENT_SIZE_LEN : 16,
   TCP_ENCODING: 'utf-8'
